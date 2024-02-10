@@ -84,6 +84,7 @@ impl App {
         } else {
             println!("SCRIPT not entered");
         }
+        std::thread::sleep(std::time::Duration::from_secs(1));
 
         Ok(())
     }
