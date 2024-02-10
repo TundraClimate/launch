@@ -11,7 +11,7 @@ $ git clone https://github.com/TundraClimate/launch.git
 $ cd launch
 
 $ cargo build -r
-$ ln -s ./target/release/launch /usr/local/bin
+$ ln -s ${PWD}/target/release/launch /usr/local/bin
 ```
 
 ## How to use
