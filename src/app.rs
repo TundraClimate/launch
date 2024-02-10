@@ -1,4 +1,5 @@
 use clap::Parser;
+use toml::map::Map;
 use std::{fs::{self, File}, io};
 
 #[derive(Parser)]
@@ -38,11 +39,38 @@ impl App {
         }
 
         // create configration file
-        let config = data_dir.join("launch.config");
+        let config = data_dir.join("launch.config.toml");
         if !config.exists() {
             File::create(config)?;
         }
 
         Ok(())
     }
+}
+
+fn read_conf() -> io::Result<Map<String, toml::Value>> {
+    let config = dirs::data_local_dir().unwrap().join("launch").join("launch.config.toml");
+    let config = fs::read_to_string(config).unwrap();
+    let conf: Map<_, _> = toml::from_str(config.as_str()).expect("Unable to load config");
+    Ok(conf)
+}
+
+fn set_script(script: String, cmd: String) -> io::Result<()> {
+    let config = dirs::data_local_dir().unwrap().join("launch").join("launch.config.toml");
+    let mut conf: Map<_, _> = read_conf()?;
+    if conf.contains_key(script.as_str()) {
+        conf.remove(script.as_str());
+    }
+    conf.insert(script, toml::Value::String(cmd));
+    fs::write(config, conf.to_string().as_bytes())?;
+    
+    Ok(())
+}
+
+fn rm_script(script: String) -> io::Result<()> {
+    let config = dirs::data_local_dir().unwrap().join("launch").join("launch.config.toml");
+    let mut conf: Map<_, _> = read_conf()?;
+    conf.remove(script.as_str());
+    fs::write(config, conf.to_string().as_bytes())?;
+    Ok(())
 }
