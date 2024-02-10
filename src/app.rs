@@ -1,6 +1,6 @@
 use clap::Parser;
 use toml::map::Map;
-use std::{fs::{self, File}, io};
+use std::{fs::{self, File}, io, process::Command};
 
 #[derive(Parser)]
 #[command(version, author, about, long_about = None)]
@@ -69,6 +69,20 @@ impl App {
                 }
             }
             return Ok(());
+        }
+
+        let conf = read_conf()?;
+        if let Some(script) = script {
+            if conf.contains_key(script.as_str()) {
+                let cmd = conf.get(script.as_str()).unwrap().as_str().unwrap();
+                let mut cmd: Vec<_> = cmd.split(" ").collect();
+                let command = cmd[0];
+                cmd.remove(0);
+                let args = cmd;
+                Command::new(command).args(args).spawn()?;
+            }
+        } else {
+            println!("SCRIPT not entered");
         }
 
         Ok(())
