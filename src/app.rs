@@ -26,8 +26,40 @@ pub struct App {
 }
 
 impl App {
-    pub fn run() {
+    pub fn run() -> io::Result<()> {
         let app = App::parse();
+        let script = app.script;
+        
+        if let Some(v) = app.set {
+            set_script(script, v)?;
+            return Ok(());
+        }
+
+        if let Some(_) = app.rm {
+            if app.all {
+                for k in read_conf()?.keys() {
+                    rm_script(k.clone())?;
+                }
+            } else {
+                rm_script(script)?;
+            }
+            return Ok(());
+        }
+
+        if app.show {
+            let conf = read_conf()?;
+            if app.all {
+                for e in conf.iter() {
+                    println!("{}: {}", e.0, e.1);
+                }
+            } else {
+                let cmd = conf.get(script.as_str()).unwrap();
+                println!("{}: {}", script, cmd);
+            }
+            return Ok(());
+        }
+
+        Ok(())
     }
 
     pub fn init() -> io::Result<()> {

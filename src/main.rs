@@ -6,7 +6,7 @@ use std::io;
 fn main() -> io::Result<()> {
     App::init()?;
     
-    App::run();
+    App::run()?;
 
     Ok(())
 }
