@@ -10,8 +10,8 @@ pub struct App {
     set: Option<String>,
 
     /// Remove command by name
-    #[arg(long, value_name = "COMMAND")]
-    rm: Option<String>,
+    #[arg(long)]
+    rm: bool,
 
     /// Show info by name
     #[arg(long)]
@@ -35,7 +35,7 @@ impl App {
             return Ok(());
         }
 
-        if let Some(_) = app.rm {
+        if app.rm {
             if app.all {
                 for k in read_conf()?.keys() {
                     rm_script(k.clone())?;
