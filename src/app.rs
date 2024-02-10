@@ -22,7 +22,7 @@ pub struct App {
     all: bool,
 
     /// script name
-    script: String,
+    script: Option<String>,
 }
 
 impl App {
@@ -31,7 +31,11 @@ impl App {
         let script = app.script;
         
         if let Some(v) = app.set {
-            set_script(script, v)?;
+            if let Some(script) = script {
+                set_script(script, v)?;
+            } else {
+                println!("SCRIPT not entered");
+            }
             return Ok(());
         }
 
@@ -41,7 +45,11 @@ impl App {
                     rm_script(k.clone())?;
                 }
             } else {
-                rm_script(script)?;
+                if let Some(script) = script {
+                    rm_script(script)?;
+                } else {
+                    println!("SCRIPT not entered");
+                }
             }
             return Ok(());
         }
@@ -53,8 +61,12 @@ impl App {
                     println!("{}: {}", e.0, e.1);
                 }
             } else {
-                let cmd = conf.get(script.as_str()).unwrap();
-                println!("{}: {}", script, cmd);
+                if let Some(script) = script {
+                    let cmd = conf.get(script.as_str()).unwrap();
+                    println!("{}: {}", script, cmd);
+                } else {
+                    println!("SCRIPT not entered");
+                }
             }
             return Ok(());
         }
