@@ -1,6 +1,5 @@
 use clap::Parser;
 use std::{fs::{self, File}, io};
-use dotenv;
 
 #[derive(Parser)]
 #[command(version, author, about, long_about = None)]
@@ -44,13 +43,6 @@ impl App {
             File::create(config)?;
         }
 
-        load_scripts();
-        
         Ok(())
     }
-}
-
-fn load_scripts() {
-    let config = dirs::data_local_dir().unwrap().join("launch").join("launch.config");
-    dotenv::from_path(config).expect("file cannot be read");
 }
