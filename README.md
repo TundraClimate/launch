@@ -26,7 +26,7 @@ Options:
       --set <COMMAND>  Set command by name
       --rm             Remove command by name
       --show           Show info by name
-  -a, --all            Run on all scripts(ignored if --add)
+  -a, --all            Run on all scripts(ignored if --set)
   -h, --help           Print help
   -V, --version        Print version
 ```

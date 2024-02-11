@@ -17,7 +17,7 @@ pub struct App {
     #[arg(long)]
     show: bool,
 
-    /// Run on all scripts(ignored if --add)
+    /// Run on all scripts(ignored if --set)
     #[arg(short, long)]
     all: bool,
 
